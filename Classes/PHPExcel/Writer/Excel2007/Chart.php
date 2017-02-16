@@ -109,6 +109,14 @@ class PHPExcel_Writer_Excel2007_Chart extends PHPExcel_Writer_Excel2007_WriterPa
 
 			$this->_writePrintSettings($objWriter);
 
+			// remove border (we globally dont want borders around the charts for yielco
+			$objWriter->startElement('c:spPr');
+				$objWriter->startElement('a:ln');
+					$objWriter->startElement('a:noFill');
+					$objWriter->endElement();
+				$objWriter->endElement();
+			$objWriter->endElement();
+
 		$objWriter->endElement();
 
 		// Return
@@ -578,7 +586,21 @@ class PHPExcel_Writer_Excel2007_Chart extends PHPExcel_Writer_Excel2007_WriterPa
 			$objWriter->endElement();
 
 			if (!is_null($yAxisLabel)) {
+
+//				$objWriter->startElement('c:title');
+//				$objWriter->startElement('c:tx');
+//				$objWriter->startElement('c:rich');
+//
+//				$objWriter->startElement('a:bodyPr');
+//				$objWriter->endElement();
+//
+//				$objWriter->startElement('a:lstStyle');
+//				$objWriter->endElement();
+//
+//				$objWriter->startElement('a:p');
+
 				$objWriter->startElement('c:title');
+
 					$objWriter->startElement('c:tx');
 						$objWriter->startElement('c:rich');
 
@@ -589,17 +611,25 @@ class PHPExcel_Writer_Excel2007_Chart extends PHPExcel_Writer_Excel2007_WriterPa
 							$objWriter->endElement();
 
 							$objWriter->startElement('a:p');
-								$objWriter->startElement('a:r');
+								// $objWriter->startElement('a:r');
 
 									$caption = $yAxisLabel->getCaption();
 									if (is_array($caption))
 										$caption = $caption[0];
-									$objWriter->startElement('a:t');
+
+									$pRichText = new PHPExcel_RichText();
+									$pRichText->createTextRun($caption);
+									$elements = $pRichText->getRichTextElements();
+									foreach ($elements as $element) {
+										$element->setFont($yAxisLabel->getFont());
+									}
+									$this->getParentWriter()->getWriterPart('stringtable')->writeRichTextForCharts($objWriter, $pRichText, 'a');
+									/*$objWriter->startElement('a:t');
 //										$objWriter->writeAttribute('xml:space', 'preserve');
 										$objWriter->writeRawData(PHPExcel_Shared_String::ControlCharacterPHP2OOXML( $caption ));
-									$objWriter->endElement();
+									$objWriter->endElement();*/
 
-								$objWriter->endElement();
+								// $objWriter->endElement();
 							$objWriter->endElement();
 						$objWriter->endElement();
 					$objWriter->endElement();
@@ -792,12 +822,14 @@ class PHPExcel_Writer_Excel2007_Chart extends PHPExcel_Writer_Excel2007_WriterPa
 					$objWriter->endElement();
 				}
 
-				//	Formatting for the points
+				//	Formatting for the points and the line
 				if (($groupType == PHPExcel_Chart_DataSeries::TYPE_LINECHART) ||
                     ($groupType == PHPExcel_Chart_DataSeries::TYPE_STOCKCHART)) {
 					$objWriter->startElement('c:spPr');
 						$objWriter->startElement('a:ln');
-							$objWriter->writeAttribute('w', 12700);
+							// width is in EMU, 12700 EMU equals 1 pt ( see https://msdn.microsoft.com/en-us/library/bb264112(v=vs.85).aspx)
+							$lineThickness = round( $plotGroup->getLineThickness() * 12700 );
+							$objWriter->writeAttribute('w', $lineThickness);
             				if ($groupType == PHPExcel_Chart_DataSeries::TYPE_STOCKCHART) {
 						        $objWriter->startElement('a:noFill');
 						        $objWriter->endElement();

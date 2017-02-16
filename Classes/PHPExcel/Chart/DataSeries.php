@@ -134,6 +134,12 @@ class PHPExcel_Chart_DataSeries
     private $plotValues = array();
 
     /**
+     * Line thickness in pt (for Line Charts)
+     *
+     * @var float */
+    private $lineThickness = 1;
+
+    /**
      * Create a new PHPExcel_Chart_DataSeries
      */
     public function __construct($plotType = null, $plotGrouping = null, $plotOrder = array(), $plotLabel = array(), $plotCategory = array(), $plotValues = array(), $plotDirection = null, $smoothLine = null, $plotStyle = null)
@@ -160,6 +166,28 @@ class PHPExcel_Chart_DataSeries
         }
         $this->plotDirection = $plotDirection;
     }
+
+
+
+    /**
+     * @return float
+     */
+    public function getLineThickness()
+    {
+        return $this->lineThickness;
+    }
+
+
+
+    /**
+     * @param float $lineThickness
+     */
+    public function setLineThickness( $lineThickness )
+    {
+        $this->lineThickness = $lineThickness;
+    }
+
+
 
     /**
      * Get Plot Type

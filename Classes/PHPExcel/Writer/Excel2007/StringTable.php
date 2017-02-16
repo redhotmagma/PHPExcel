@@ -242,6 +242,8 @@ class PHPExcel_Writer_Excel2007_StringTable extends PHPExcel_Writer_Excel2007_Wr
             // rPr
             $objWriter->startElement($prefix.'rPr');
 
+            // Size
+            $objWriter->writeAttribute('sz', $element->getFont()->getSize() * 100 );
             // Bold
             $objWriter->writeAttribute('b', ($element->getFont()->getBold() ? 1 : 0));
             // Italic
@@ -259,11 +261,6 @@ class PHPExcel_Writer_Excel2007_StringTable extends PHPExcel_Writer_Excel2007_Wr
             $objWriter->writeAttribute('u', $underlineType);
             // Strikethrough
             $objWriter->writeAttribute('strike', ($element->getFont()->getStrikethrough() ? 'sngStrike' : 'noStrike'));
-
-            // rFont
-            $objWriter->startElement($prefix.'latin');
-                $objWriter->writeAttribute('typeface', $element->getFont()->getName());
-            $objWriter->endElement();
 
                 // Superscript / subscript
 //                    if ($element->getFont()->getSuperScript() || $element->getFont()->getSubScript()) {
