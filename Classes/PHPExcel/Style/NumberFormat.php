@@ -186,6 +186,19 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
     }
 
     /**
+     * Get Built-In Format Code
+     *
+     * @return int
+     */
+    public function getBuiltInFormatCode()
+    {
+        if ($this->isSupervisor) {
+            return $this->getSharedComponent()->getBuiltInFormatCode();
+        }
+        return $this->builtInFormatCode;
+    }
+
+    /**
      * Set Format Code
      *
      * @param string $pValue
@@ -204,19 +217,6 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
             $this->builtInFormatCode = self::builtInFormatCodeIndex($pValue);
         }
         return $this;
-    }
-
-    /**
-     * Get Built-In Format Code
-     *
-     * @return int
-     */
-    public function getBuiltInFormatCode()
-    {
-        if ($this->isSupervisor) {
-            return $this->getSharedComponent()->getBuiltInFormatCode();
-        }
-        return $this->builtInFormatCode;
     }
 
     /**

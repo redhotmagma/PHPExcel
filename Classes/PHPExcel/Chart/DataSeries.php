@@ -140,6 +140,13 @@ class PHPExcel_Chart_DataSeries
     private $lineThickness = 1;
 
     /**
+     * Percentage of explosion (for Pie Charts)
+     *
+     * @var int
+     */
+    private $explosion = 0;
+
+    /**
      * Create a new PHPExcel_Chart_DataSeries
      */
     public function __construct($plotType = null, $plotGrouping = null, $plotOrder = array(), $plotLabel = array(), $plotCategory = array(), $plotValues = array(), $plotDirection = null, $smoothLine = null, $plotStyle = null)
@@ -186,6 +193,28 @@ class PHPExcel_Chart_DataSeries
     {
         $this->lineThickness = $lineThickness;
     }
+
+
+
+    /**
+     * @return int
+     */
+    public function getExplosion()
+    {
+        return $this->explosion;
+    }
+
+
+
+    /**
+     * @param int $explosion
+     */
+    public function setExplosion( $explosion )
+    {
+        $this->explosion = $explosion;
+    }
+
+
 
 
 

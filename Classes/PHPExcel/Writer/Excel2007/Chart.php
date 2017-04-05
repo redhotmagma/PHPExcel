@@ -882,6 +882,13 @@ class PHPExcel_Writer_Excel2007_Chart extends PHPExcel_Writer_Excel2007_WriterPa
 								$objWriter->endElement();
 							}
 						}
+
+						if( $plotGroup->getExplosion() > 0 ) {
+							$objWriter->startElement('c:explosion');
+								$objWriter->writeAttribute('val', $plotGroup->getExplosion() );
+							$objWriter->endElement();
+						}
+
 					}
 
 					if (($groupType === PHPExcel_Chart_DataSeries::TYPE_BUBBLECHART) ||

@@ -103,6 +103,7 @@ class PHPExcel_Chart_Title
     public function getFont() {
         if( empty( $this->font ) ) {
             $this->font = new PHPExcel_Style_Font();
+            $this->font->setSize( 9 );
         }
         return $this->font;
     }
